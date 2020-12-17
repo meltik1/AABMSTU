@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.Ticks)
 @State(Scope.Benchmark)
 public class TimeMeasureLab4 {
-    @Param({"100", "200", "300" , "400", "500", "600", "700", "800", "900"  })
+    @Param({"100", "200", "300" , "400", "500", "600", "700", "800", "900", "1000"  })
     public int params;
 
     public  int[][] generate_matrix(int n, int m) {
