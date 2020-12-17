@@ -12,12 +12,4 @@ public class Main {
         return arr;
     }
 
-    public static void main(String[] args) {
-        int[] arr =  generate_arr(100000);
-        System.out.println(TimeTests.MeasureMergeSort(arr));
-        System.out.println(TimeTests.MeasureQucikSort(arr));
-        System.out.println(TimeTests.MeasureBubbleSort(arr));
-
-
-    }
 }

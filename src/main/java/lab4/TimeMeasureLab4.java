@@ -1,4 +1,4 @@
-package lab2;
+package lab4;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.results.format.ResultFormatType;
@@ -12,10 +12,10 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Fork(value = 1)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
-public class TimeMeasure {
-    @Param({"1000", "200", "300" , "400", "500", "600", "700", "800", "900" })
+public class TimeMeasureLab4 {
+    @Param({"100", "200", "300" , "400", "500", "600", "700", "800", "900"  })
     public int params;
 
     public  int[][] generate_matrix(int n, int m) {
@@ -31,40 +31,60 @@ public class TimeMeasure {
 
 
     public static void main(String[] args) throws IOException, RunnerException {
-        Options options = new OptionsBuilder().include(TimeMeasure.class.getSimpleName()).
-                forks(1).resultFormat(ResultFormatType.LATEX).result("qwe.tex").build();
+        Options options = new OptionsBuilder().include(TimeMeasureLab4.class.getSimpleName()).
+                forks(1).resultFormat(ResultFormatType.LATEX).result("MatrixComparison.tex").build();
         new Runner(options).run();
 
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @Warmup(iterations = 2)
-    @Measurement(iterations = 100)
+    @Measurement(iterations = 10)
     public int[][] MeasureStandart() {
         int[][] mart1 = generate_matrix(params, params);
         int[][] matr2 = generate_matrix(params, params);
-        return Matrix.MultStand(mart1, matr2);
-
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @Warmup(iterations = 2)
-    @Measurement(iterations = 100)
-    public int[][] MeasurePomgrade() {
-        int[][] mart1 = generate_matrix(params, params);
-        int[][] matr2 = generate_matrix(params, params);
-        return Matrix.MultVin(mart1, matr2);
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @Warmup(iterations = 2)
-    @Measurement(iterations = 100)
-    public int[][] MeasurePomgradeOpt() {
-        int[][] mart1 = generate_matrix(params, params);
-        int[][] matr2 = generate_matrix(params, params);
         return Matrix.MultVinOpt(mart1, matr2);
+
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @Warmup(iterations = 2)
+    @Measurement(iterations = 10)
+    public int[][] MeasureParallel2() throws InterruptedException {
+        int[][] mart1 = generate_matrix(params, params);
+        int[][] matr2 = generate_matrix(params, params);
+        return MatrixParallel.MultVinOpt(mart1, matr2, 2);
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @Warmup(iterations = 2)
+    @Measurement(iterations = 10)
+    public int[][] MeasureParallel4() throws InterruptedException {
+        int[][] mart1 = generate_matrix(params, params);
+        int[][] matr2 = generate_matrix(params, params);
+        return MatrixParallel.MultVinOpt(mart1, matr2, 4);
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @Warmup(iterations = 2)
+    @Measurement(iterations = 10)
+    public int[][] MeasureParallel8() throws InterruptedException {
+        int[][] mart1 = generate_matrix(params, params);
+        int[][] matr2 = generate_matrix(params, params);
+        return MatrixParallel.MultVinOpt(mart1, matr2, 8);
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @Warmup(iterations = 2)
+    @Measurement(iterations = 10)
+    public int[][] MeasureParallel1() throws InterruptedException {
+        int[][] mart1 = generate_matrix(params, params);
+        int[][] matr2 = generate_matrix(params, params);
+        return MatrixParallel.MultVinOpt(mart1, matr2, 1);
     }
 
 }

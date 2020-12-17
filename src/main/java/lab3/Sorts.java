@@ -3,15 +3,17 @@ package lab3;
 public class Sorts {
     public static void bubbleSort(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
+            boolean flag = false;
             for (int j = 0; j <arr.length - i-1; j ++) {
                 if (arr[j] > arr[j+1]) {
                     int element = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = element;
+                    flag = true;
                 }
             }
-            if (i%10000 == 0 ) {
-                System.out.println("OK" + i);
+            if (!flag) {
+                return;
             }
         }
     }
@@ -25,24 +27,30 @@ public class Sorts {
     }
 
     private static int partition(int arr[], int begin, int end) {
-        int pivot = arr[end];
-        int i = (begin-1);
+        int pivot = arr[(begin + end) / 2];
+        int i = begin - 1, j = end + 1;
 
-        for (int j = begin; j < end; j++) {
-            if (arr[j] <= pivot) {
+        while (true)
+        {
+            do
+            {
                 i++;
-
-                int swapTemp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = swapTemp;
             }
+            while (arr[i] < pivot);
+
+            do
+            {
+                j--;
+            }
+            while (arr[j] > pivot);
+
+            if (i >= j)
+                return j;
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            //Swap(ref arr[i], ref arr[j]);
         }
-
-        int swapTemp = arr[i+1];
-        arr[i+1] = arr[end];
-        arr[end] = swapTemp;
-
-        return i+1;
     }
 
     public static void mergeSort(int[] a, int n) {
