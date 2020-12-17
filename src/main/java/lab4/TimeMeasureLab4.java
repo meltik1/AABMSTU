@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Fork(value = 1)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.Ticks)
 @State(Scope.Benchmark)
 public class TimeMeasureLab4 {
     @Param({"100", "200", "300" , "400", "500", "600", "700", "800", "900"  })
