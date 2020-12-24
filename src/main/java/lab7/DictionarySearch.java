@@ -1,8 +1,11 @@
 package lab7;
 
+import lombok.Getter;
+
 import java.sql.SQLException;
 import java.util.*;
 
+@Getter
 public class DictionarySearch {
 
     private DictionaryExtractor extractor;
@@ -91,9 +94,7 @@ public class DictionarySearch {
         return binarySearch(email, listofSortedCustomers, l, r);
     }
 
-    public Double searchBySegmentSorted(String email) {
-        List<SegmentDTO> sortedSegments = new ArrayList<>(segments);
-
+    private static void BubbleSort(List<SegmentDTO> sortedSegments) {
         for (int i = 0; i < sortedSegments.size()-1; i++) {
             for (int j = 0; j < sortedSegments.size() - 1 - i; j++) {
                 SegmentDTO segment_1 = sortedSegments.get(j);
@@ -106,6 +107,50 @@ public class DictionarySearch {
                 }
             }
         }
+    }
+
+    public static void quickSort(List<SegmentDTO> arr, int start, int end) {
+        if (start < end) {
+            int pivot = partition(arr, start, end);
+            quickSort(arr, start, pivot-1);
+            quickSort(arr, pivot+1, end);
+        }
+    }
+
+    private static int partition(List<SegmentDTO> arr, int begin, int end) {
+        SegmentDTO pivotSegm = arr.get((begin + end) / 2);
+        int pivot = (pivotSegm.right_border - pivotSegm.getLeft_border());
+        int i = begin - 1, j = end + 1;
+
+        while (true)
+        {
+
+
+            do
+            {
+                i++;
+            }
+            while (arr.get(i).getRight_border() - arr.get(i).getLeft_border() < pivot);
+
+            do
+            {
+                j--;
+            }
+            while (arr.get(j).getRight_border() - arr.get(j).getLeft_border() > pivot);
+
+            if (i >= j)
+                return j;
+            SegmentDTO tmp = arr.get(i);
+            arr.set(i, arr.get(j));
+            arr.set(j , tmp);
+            //Swap(ref arr[i], ref arr[j]);
+        }
+    }
+
+    public Double searchBySegmentSortedQuick(String email) {
+        List<SegmentDTO> sortedSegments = new ArrayList<>(segments);
+
+        quickSort(sortedSegments, 0 , sortedSegments.size()-1);
 
         int l = -1, r= -1;
         for (SegmentDTO segment: sortedSegments) {
@@ -118,12 +163,31 @@ public class DictionarySearch {
         return binarySearch(email, listofSortedCustomers, l, r);
     }
 
+
+
+    public Double searchBySegmentSortedBubble(String email) {
+        List<SegmentDTO> sortedSegments = new ArrayList<>(segments);
+
+        BubbleSort(sortedSegments);
+        int l = -1, r= -1;
+        for (SegmentDTO segment: sortedSegments) {
+            if (segment.getCharacter() == email.charAt(0)) {
+                l = segment.getLeft_border();
+                r = segment.getRight_border();
+                break;
+            }
+        }
+        return binarySearch(email, listofSortedCustomers, l, r);
+    }
+
+
+
     public static void main(String[] args) throws SQLException {
         DictionarySearch search = new DictionarySearch();
         char c = 'a';
 
         for (int i = 0; i < search.listofSortedCustomers.size(); i++) {
-            if (search.searchBySegmentSorted(search.listofSortedCustomers.get(i).getKey()) == null) {
+            if (search.searchBySegmentSortedQuick(search.listofSortedCustomers.get(i).getKey()) == null) {
                 System.out.println("Not found");
             }
         }
