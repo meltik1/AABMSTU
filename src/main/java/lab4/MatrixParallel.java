@@ -1,5 +1,6 @@
 package lab4;
 
+import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 
 public class MatrixParallel {
@@ -78,7 +79,7 @@ public class MatrixParallel {
 
         Thread[] threads = new Thread[thread_number];
         int row_start = 0;
-        int rowsPerThred = threads.length/thread_number;
+        int rowsPerThred = n1/thread_number;
         for (int i  = 0; i < thread_number; i++) {
             int row_end = row_start + rowsPerThred;
             if (i == thread_number - 1)
@@ -103,9 +104,11 @@ public class MatrixParallel {
             row_start = row_end;
         }
 
+
         for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
+
 
 
         if (m1Mod2 == 1)
